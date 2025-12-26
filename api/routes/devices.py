@@ -9,39 +9,45 @@ from api.models.device_models import (
     CreateDeviceRequest,
     GetDeviceResponse,
 )
+from db.services.device_service import DeviceService
 from db.database import get_db
-from db.models import Device, DeviceData
+
+
+def get_device_service(db: Session = Depends(get_db)) -> DeviceService:
+    return DeviceService(db)
+
 
 router = APIRouter(prefix="/devices", tags=["devices"])
 
 
 @router.post("/", response_model=GetDeviceResponse)
-def create_device(device: CreateDeviceRequest, db: Session = Depends(get_db)):
-    new_device = Device(name=device.name)
-    db.add(new_device)
-    db.commit()
-    db.refresh(new_device)
-    return new_device
+def create_device(
+    device: CreateDeviceRequest,
+    device_service: DeviceService = Depends(get_device_service),
+):
+    return device_service.create_device(device.name)
 
 
 @router.get("/", response_model=List[GetDeviceResponse])
-def list_devices(db: Session = Depends(get_db)):
-    return db.query(Device).all()
+def list_devices(device_service: DeviceService = Depends(get_device_service)):
+    return device_service.get_all_devices()
 
 
 @router.delete("/{device_id}")
-def delete_device(device_id: str, db: Session = Depends(get_db)):
-    db_device = db.query(Device).filter(Device.id == device_id).first()
-    if not db_device:
-        raise HTTPException(status_code=404, detail="Device not found")
-    db.delete(db_device)
-    db.commit()
-    return {"message": "Device deleted"}
+def delete_device(
+    device_id: str, device_service: DeviceService = Depends(get_device_service)
+):
+    try:
+        return device_service.delete_device(device_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
 
 
 @router.get("/{device_id}")
-def get_device_data(device_id: str, db: Session = Depends(get_db)):
-    return db.query(DeviceData).filter(DeviceData.device_id == device_id).all()
+def get_device_data(
+    device_id: str, device_service: DeviceService = Depends(get_device_service)
+):
+    return device_service.get_device_data(device_id)
 
 
 @router.post("/{device_id}/control")
