@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 
 from api.routes import devices
-from db import models
+from db.models import device_models
 from db.database import engine
 
 # Create database tables
-models.Base.metadata.create_all(bind=engine)
+device_models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Smart Cat API")
 
@@ -14,5 +14,5 @@ app.include_router(devices.router)
 
 
 @app.get("/")
-def read_root():
-    return {"message": "Welcome to the Smart Cat API"}
+def get_info():
+    return "Welcome to the Smart Cat API"
