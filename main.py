@@ -3,11 +3,15 @@ import os
 import uvicorn
 from api.app import app
 from mqtt.broker import start_mqtt_broker
+from mqtt.listener import start_mqtt_listener
 
 
 async def main():
     # Start MQTT Broker
     _ = asyncio.create_task(start_mqtt_broker())
+
+    # Start MQTT Listener (to save data to DB)
+    _ = asyncio.create_task(start_mqtt_listener())
 
     # API Configuration from environment variables
     api_host = os.getenv("API_HOST", "0.0.0.0")
