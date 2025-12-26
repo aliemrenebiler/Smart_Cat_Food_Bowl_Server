@@ -13,7 +13,7 @@ from db.services.device_service import DeviceService
 from db.database import get_db
 
 
-def get_device_service(db: Session = Depends(get_db)) -> DeviceService:
+def _device_service(db: Session = Depends(get_db)) -> DeviceService:
     return DeviceService(db)
 
 
@@ -23,19 +23,19 @@ router = APIRouter(prefix="/devices", tags=["devices"])
 @router.post("/", response_model=GetDeviceResponse)
 def create_device(
     device: CreateDeviceRequest,
-    device_service: DeviceService = Depends(get_device_service),
+    device_service: DeviceService = Depends(_device_service),
 ):
     return device_service.create_device(device.name)
 
 
 @router.get("/", response_model=List[GetDeviceResponse])
-def list_devices(device_service: DeviceService = Depends(get_device_service)):
+def list_devices(device_service: DeviceService = Depends(_device_service)):
     return device_service.get_all_devices()
 
 
 @router.delete("/{device_id}")
 def delete_device(
-    device_id: str, device_service: DeviceService = Depends(get_device_service)
+    device_id: str, device_service: DeviceService = Depends(_device_service)
 ):
     try:
         return device_service.delete_device(device_id)
@@ -45,7 +45,7 @@ def delete_device(
 
 @router.get("/{device_id}")
 def get_device_data(
-    device_id: str, device_service: DeviceService = Depends(get_device_service)
+    device_id: str, device_service: DeviceService = Depends(_device_service)
 ):
     return device_service.get_device_data(device_id)
 
