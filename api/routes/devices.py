@@ -60,5 +60,5 @@ def control_device(device_id: str, command: str):
     try:
         publish.single(full_topic, command, hostname=mqtt_host, port=mqtt_port)
         return {"message": f"Command sent to {full_topic}", "command": command}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) from e
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc)) from exc

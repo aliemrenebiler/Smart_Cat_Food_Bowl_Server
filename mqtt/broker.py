@@ -23,5 +23,5 @@ async def start_mqtt_broker():
         # Keep the broker running
         while True:
             await asyncio.sleep(1)
-    except Exception as e:  # pylint: disable=broad-except
-        print(f"Error starting MQTT Broker: {e}")
+    except Exception as exc:  # pylint: disable=broad-except
+        print(f"Error starting MQTT Broker: {exc}")
