@@ -1,7 +1,7 @@
 from datetime import datetime
 import uuid
 
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, String, DateTime, ForeignKey
 
 from db.database import Base
 
@@ -25,8 +25,8 @@ class Device(Base):
 class DeviceData(Base):
     __tablename__ = "device_data"
 
-    id = Column(Integer, primary_key=True, index=True)
-    device_id = Column(String, index=True)
+    id = Column(String, primary_key=True, index=True, default=lambda: str(uuid.uuid4()))
+    device_id = Column(String, ForeignKey("devices.id"), index=True)
     topic = Column(String)
     payload = Column(String)
     timestamp = Column(DateTime, default=datetime.utcnow)
