@@ -11,6 +11,7 @@ class Device(Base):
 
     id = Column(String, primary_key=True, index=True, default=lambda: str(uuid.uuid4()))
     name = Column(String)
+    model = Column(String, default="food_bowl")
     created_at = Column(DateTime, default=datetime.utcnow)
 
     @property
