@@ -11,7 +11,6 @@ config = {
             "bind": f"0.0.0.0:{MQTT_PORT}",
         }
     },
-    "plugins": ["auth_anonymous"],
 }
 
 
