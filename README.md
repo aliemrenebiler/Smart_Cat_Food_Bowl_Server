@@ -33,8 +33,9 @@ This project provides a FastAPI-based API and an MQTT client that share a local 
 ## API Endpoints
 
 -   `GET /`: Welcome message.
--   `POST /devices`: Register a new device (JSON: `{"unique_id": "...", "name": "..."}`).
--   `GET /devices`: List all registered devices.
+-   `POST /devices`: Register a new device (JSON: `{"name": "...", "model": "..."}`).
+-   `GET /devices`: Get all registered devices.
 -   `DELETE /devices/{unique_id}`: Remove a device.
--   `GET /data/{unique_id}`: Retrieve data logs for a specific device.
--   `POST /devices/{unique_id}/publish`: Send an MQTT message to a device.
+-   `GET /devices/{unique_id}`: Get data logs for a specific device.
+-   `GET /devices/{unique_id}/latest`: Get latest data log for a specific device.
+-   `POST /devices/{unique_id}/control`: Send an MQTT message to a device.
