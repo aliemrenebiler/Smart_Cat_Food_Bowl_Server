@@ -31,3 +31,11 @@ class DeviceService:
 
     def get_device_data(self, device_id: str) -> list[DeviceData]:
         return self.db.query(DeviceData).filter(DeviceData.device_id == device_id).all()
+
+    def get_latest_device_data(self, device_id: str) -> DeviceData:
+        return (
+            self.db.query(DeviceData)
+            .filter(DeviceData.device_id == device_id)
+            .order_by(DeviceData.timestamp.desc())
+            .first()
+        )

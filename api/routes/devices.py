@@ -33,7 +33,7 @@ def list_devices(device_service: DeviceService = Depends(_device_service)):
     return device_service.get_all_devices()
 
 
-@router.delete("/{device_id}")
+@router.delete("/{device_id}/")
 def delete_device(
     device_id: str, device_service: DeviceService = Depends(_device_service)
 ):
@@ -43,14 +43,21 @@ def delete_device(
         raise HTTPException(status_code=404, detail=str(e)) from e
 
 
-@router.get("/{device_id}")
+@router.get("/{device_id}/")
 def get_device_data(
     device_id: str, device_service: DeviceService = Depends(_device_service)
 ):
     return device_service.get_device_data(device_id)
 
 
-@router.post("/{device_id}/control")
+@router.get("/{device_id}/latest/")
+def get_latest_device_data(
+    device_id: str, device_service: DeviceService = Depends(_device_service)
+):
+    return device_service.get_latest_device_data(device_id)
+
+
+@router.post("/{device_id}/control/")
 def control_device(device_id: str, command: str):
     MQTT_HOST = os.getenv("MQTT_HOST", "0.0.0.0")
     MQTT_TCP_PORT = int(os.getenv("MQTT_TCP_PORT", "1883"))
