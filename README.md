@@ -20,8 +20,9 @@ This project provides a FastAPI-based API and an MQTT client that share a local 
 2. Configure environment variables (optional, defaults are used):
 
     - `DATABASE_URL`: SQLite database URL (default: `sqlite:///./sql_app.db`).
-    - `MQTT_PORT`: Port for the built-in MQTT broker (default: 1883).
-    - `API_HOST`: Host for the FastAPI API (default: `0.0.0.0`).
+    - `MQTT_TCP_PORT`: TCP Port for the built-in MQTT broker (default: `1883`).
+    - `MQTT_WS_PORT`: WS Port for the built-in MQTT broker (default: `8001`).
+    - `API_HOST`: Host for the FastAPI API (default: `localhost`).
     - `API_PORT`: Port for the FastAPI API (default: `8000`).
 
 3. Run the application:
