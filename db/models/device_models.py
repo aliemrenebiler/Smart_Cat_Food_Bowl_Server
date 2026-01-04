@@ -17,12 +17,12 @@ class Device(Base):
     @property
     def info_topic(self):
         return "devices/bowl/info"
-        # return f"devices/{self.id}/info"
+        # return f"devices/{self.id}/info" <--- ORIGINAL ----
 
     @property
     def control_topic(self):
         return "devices/bowl/control"
-        # return f"devices/{self.id}/control"
+        # return f"devices/{self.id}/control" <--- ORIGINAL ----
 
 
 class DeviceData(Base):
