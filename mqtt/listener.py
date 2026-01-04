@@ -5,6 +5,10 @@ import paho.mqtt.client as mqtt
 
 from db.database import SessionLocal
 from db.services.device_service import DeviceService
+from utils.logging_utils import get_logger
+
+
+logger = get_logger(__name__)
 
 
 def handle_device_info_message(msg: mqtt.MQTTMessage):
@@ -14,25 +18,31 @@ def handle_device_info_message(msg: mqtt.MQTTMessage):
         and topic_parts[0] == "devices"
         and topic_parts[2] == "info"
     ):
-        error = None
-        device_id = topic_parts[1]
+        # device_id = topic_parts[1] <--- ORIGINAL ----
 
         db = SessionLocal()
         try:
             device_service = DeviceService(db)
+
+            # ---- REMOVE THESE LATER ----
+            devices = device_service.get_all_devices()
+            if not devices:
+                raise ValueError("No devices found in the database.")
+            device = devices[0]
+            device_id = str(device.id)
+            # ---- REMOVE THESE LATER ----
+
             device_service.create_device_data(
                 device_id, msg.topic, msg.payload.decode()
             )
         except Exception as exc:  # pylint: disable=broad-except
-            error = exc
+            logger.error("Failed to handle device info message: %s", exc)
         finally:
             db.close()
 
-        if error:
-            raise error
-
 
 def on_message(_client, _userdata, msg: mqtt.MQTTMessage):
+    logger.info("Message from topic %s: %s", msg.topic, msg.payload.decode())
     handle_device_info_message(msg)
 
 
