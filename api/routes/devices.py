@@ -29,7 +29,7 @@ def create_device(
 
 
 @router.get("/", response_model=List[GetDeviceResponse])
-def list_devices(device_service: DeviceService = Depends(_device_service)):
+def get_all_devices(device_service: DeviceService = Depends(_device_service)):
     return device_service.get_all_devices()
 
 
@@ -44,10 +44,10 @@ def delete_device(
 
 
 @router.get("/{device_id}/")
-def get_device_data(
+def get_all_device_data(
     device_id: str, device_service: DeviceService = Depends(_device_service)
 ):
-    return device_service.get_device_data(device_id)
+    return device_service.get_all_device_data(device_id)
 
 
 @router.get("/{device_id}/latest/")

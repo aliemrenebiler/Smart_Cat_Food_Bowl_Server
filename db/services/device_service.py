@@ -29,7 +29,7 @@ class DeviceService:
         self.db.add(new_data)
         self.db.commit()
 
-    def get_device_data(self, device_id: str) -> list[DeviceData]:
+    def get_all_device_data(self, device_id: str) -> list[DeviceData]:
         return self.db.query(DeviceData).filter(DeviceData.device_id == device_id).all()
 
     def get_latest_device_data(self, device_id: str) -> DeviceData:
