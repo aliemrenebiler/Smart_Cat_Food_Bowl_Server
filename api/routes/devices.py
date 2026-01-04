@@ -52,13 +52,13 @@ def get_device_data(
 
 @router.post("/{device_id}/control")
 def control_device(device_id: str, command: str):
-    mqtt_host = os.getenv("MQTT_HOST", "localhost")
-    mqtt_port = int(os.getenv("MQTT_PORT", "1883"))
+    MQTT_HOST = os.getenv("MQTT_HOST", "0.0.0.0")
+    MQTT_TCP_PORT = int(os.getenv("MQTT_TCP_PORT", "1883"))
 
     full_topic = f"devices/{device_id}/control"
 
     try:
-        publish.single(full_topic, command, hostname=mqtt_host, port=mqtt_port)
+        publish.single(full_topic, command, hostname=MQTT_HOST, port=MQTT_TCP_PORT)
         return {"message": f"Command sent to {full_topic}", "command": command}
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc

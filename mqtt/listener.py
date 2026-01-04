@@ -37,8 +37,8 @@ def on_message(_client, _userdata, msg: mqtt.MQTTMessage):
 
 
 async def start_mqtt_listener():
-    mqtt_host = os.getenv("MQTT_HOST", "localhost")
-    mqtt_port = int(os.getenv("MQTT_PORT", "1883"))
+    MQTT_HOST = os.getenv("MQTT_HOST", "0.0.0.0")
+    MQTT_TCP_PORT = int(os.getenv("MQTT_TCP_PORT", "1883"))
 
     client = mqtt.Client()
     client.on_message = on_message
@@ -47,7 +47,7 @@ async def start_mqtt_listener():
     connected = False
     while not connected:
         try:
-            client.connect(mqtt_host, mqtt_port, 60)
+            client.connect(MQTT_HOST, MQTT_TCP_PORT, 60)
             connected = True
         except Exception:  # pylint: disable=broad-except
             await asyncio.sleep(1)
