@@ -30,7 +30,12 @@ class DeviceService:
         self.db.commit()
 
     def get_all_device_data(self, device_id: str) -> list[DeviceData]:
-        return self.db.query(DeviceData).filter(DeviceData.device_id == device_id).all()
+        return (
+            self.db.query(DeviceData)
+            .filter(DeviceData.device_id == device_id)
+            .order_by(DeviceData.timestamp.desc())
+            .all()
+        )
 
     def get_latest_device_data(self, device_id: str) -> DeviceData:
         return (
