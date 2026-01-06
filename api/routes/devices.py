@@ -38,7 +38,8 @@ def delete_device(
     device_id: str, device_service: DeviceService = Depends(_device_service)
 ):
     try:
-        return device_service.delete_device(device_id)
+        device_service.delete_device_data(device_id)
+        device_service.delete_device(device_id)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e)) from e
 

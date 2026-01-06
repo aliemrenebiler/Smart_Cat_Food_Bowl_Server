@@ -14,13 +14,17 @@ class DeviceService:
         self.db.refresh(new_device)
         return new_device
 
+    def get_device(self, device_id: str) -> Device:
+        db_device = self.db.query(Device).filter(Device.id == device_id).first()
+        if not db_device:
+            raise ValueError("Device not found")
+        return db_device
+
     def get_all_devices(self) -> list[Device]:
         return self.db.query(Device).all()
 
     def delete_device(self, device_id: str):
-        db_device = self.db.query(Device).filter(Device.id == device_id).first()
-        if not db_device:
-            raise ValueError("Device not found")
+        db_device = self.get_device(device_id)
         self.db.delete(db_device)
         self.db.commit()
 
@@ -44,3 +48,7 @@ class DeviceService:
             .order_by(DeviceData.timestamp.desc())
             .first()
         )
+
+    def delete_device_data(self, device_id: str):
+        self.db.query(DeviceData).filter(DeviceData.device_id == device_id).delete()
+        self.db.commit()
